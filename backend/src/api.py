@@ -18,6 +18,8 @@ def after_request(response):
     response.headers.add('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS')
     return response
 
+# https://tnmayer.eu.auth0.com/authorize?audience=fsnd_coffee_shop&response_type=token&client_id=OTyexCMUnINd1UgH3oAmZR7EhpM4R9uU&redirect_uri=http://127.0.0.1:8080/login-results
+
 '''
 @TODO uncomment the following line to initialize the datbase
 !! NOTE THIS WILL DROP ALL RECORDS AND START YOUR DB FROM SCRATCH

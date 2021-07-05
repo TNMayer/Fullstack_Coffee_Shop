@@ -55,7 +55,7 @@ def get_drinks():
         'success': True,
         'n_drinks': len(selection),
         "drinks": all_items
-    })
+    }), 200
 
 '''
 @TODO implement endpoint
@@ -81,7 +81,7 @@ def get_drinks_detail(jwt):
         'success': True,
         'n_drinks': len(selection),
         "drinks": all_items
-    })
+    }), 200
 
 '''
 @TODO implement endpoint
@@ -123,7 +123,7 @@ def create_question(jwt):
     return jsonify({
         'success': True, 
         'drinks': [drink.long()]
-    })
+    }), 200
 
 '''
 @TODO implement endpoint
@@ -136,7 +136,40 @@ def create_question(jwt):
     returns status code 200 and json {"success": True, "drinks": drink} where drink an array containing only the updated drink
         or appropriate status code indicating reason for failure
 '''
+@app.route('/drinks/<int:drink_id>', methods=['PATCH'])
+@requires_auth('patch:drinks')
+def update_drink(jwt, drink_id):
+    # get all drinks with drink_id
+    drink = Drink.query.filter(Drink.id == drink_id).first()
 
+    # check if query returns drinks
+    if not drink:
+        abort(404)
+    
+    # get the posted body
+    body = request.get_json()
+
+    try:
+        drink_title = body.get('title')
+        drink_recipe = body.get('recipe')
+        
+        if drink_title:
+            drink.title = drink_title
+            print(drink_title)
+        
+        if drink_recipe:
+            drink.recipe = json.dumps(drink_recipe)
+            print(drink_recipe)
+        
+        drink.update()
+    except:
+        abort(422)
+    
+    # json {"success": True, "drinks": drink} where drink an array containing only the updated drink
+    return jsonify({
+        'success': True,
+        'drinks': [drink.long()]
+    }), 200
 
 '''
 @TODO implement endpoint

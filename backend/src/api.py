@@ -4,9 +4,9 @@ from sqlalchemy import exc
 import json
 from flask_cors import CORS
 
-from database.models import db_drop_and_create_all, setup_db, Drink
-from auth.auth import AuthError, requires_auth
-from errors.errors import error_404, error_422, error_400, error_405, error_500, error_authError
+from .database.models import db_drop_and_create_all, setup_db, Drink
+from .auth.auth import AuthError, requires_auth
+from .errors.errors import error_404, error_422, error_400, error_405, error_500, error_authError
 
 app = Flask(__name__)
 setup_db(app)

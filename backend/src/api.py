@@ -231,6 +231,6 @@ error_authError(app, AuthError)
 
 if __name__ == '__main__':
     # def create_app(test_config=None):
-    port = int(os.environ.get('PORT', 8080))
+    port = int(os.environ.get('PORT', 5000))
     # app.run(ssl_context='adhoc', debug=True, use_debugger=False, host='127.0.0.1', port=port, use_reloader=True)
     app.run(debug=True, use_debugger=False, host='127.0.0.1', port=port, use_reloader=True)

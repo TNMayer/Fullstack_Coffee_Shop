@@ -10,7 +10,7 @@ from errors.errors import error_404, error_422, error_400, error_405, error_500,
 
 app = Flask(__name__)
 setup_db(app)
-CORS(app, resources={'/': {'origins': '*'}})
+CORS(app)
 
 @app.after_request
 def after_request(response):
@@ -18,6 +18,7 @@ def after_request(response):
     response.headers.add('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS')
     return response
 
+# Testuser as Barista: fsnd_barista@gmx.de, password: Barista123#
 # https://tnmayer.eu.auth0.com/authorize?audience=fsnd_coffee_shop&response_type=token&client_id=OTyexCMUnINd1UgH3oAmZR7EhpM4R9uU&redirect_uri=http://127.0.0.1:8080/login-results
 
 '''
@@ -26,7 +27,7 @@ def after_request(response):
 !! NOTE THIS MUST BE UNCOMMENTED ON FIRST RUN
 !! Running this funciton will add one
 '''
-# db_drop_and_create_all()
+db_drop_and_create_all()
 
 # ROUTES
 @app.route('/')
@@ -181,7 +182,23 @@ def update_drink(jwt, drink_id):
     returns status code 200 and json {"success": True, "delete": id} where id is the id of the deleted record
         or appropriate status code indicating reason for failure
 '''
+@app.route('/drinks/<int:drink_id>', methods=['DELETE'])
+@requires_auth('delete:drinks')
+def delete_drink(jwt, drink_id):
+    try:
+        drink = Drink.query.filter(Drink.id == drink_id).one_or_none()
 
+        if drink is None:
+            abort(404)
+
+        drink.delete()
+
+        return jsonify({
+            'success': True,
+            'delete': drink_id
+        }), 200
+    except:
+        abort(422)
 
 # Error Handling
 '''
